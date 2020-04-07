@@ -17,3 +17,42 @@ function renderTopMenu()
 HTML;
     echo $topMenu;
 }
+
+function renderFile($title, $link)
+{
+    $fileCard = "";
+
+    if ($link) {
+        $fileCard = <<<HTML
+        <div class="col s2">
+            <a href="$link">
+                <div class="card-panel teal">
+                    <span class="white-text">
+                        $title
+                    </span>
+                    <br>
+                    <br>
+                    <i class="white-text small material-icons">file_download</i>
+                </div>
+            </a>
+        </div>
+HTML;
+    } else {
+        $fileCard = <<<HTML
+        <div class="col s2">
+                <div class="card-panel grey">
+                    <span class="white-text">
+                        $title
+                    </span>
+                    <br>
+                    <br>
+                    <i class="white-text small material-icons">lock</i>
+                </div>
+        </div>
+HTML;
+    }
+
+
+
+    echo $fileCard;
+}
