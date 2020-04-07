@@ -3,45 +3,52 @@
 $error = false;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if ($_POST["username"] && $_POST["password"] && $_POST["password_repeat"]) {
+    if ($_POST["username"] && $_POST["password"]) {
 
-        // Signing up  
+        // Authentication  
 
         header('Location: ../index.php');
         exit();
     } else {
-        $error = "Эу, форму заполни";
+        $error = "Введите имя пользователя и пароль";
     }
 }
+
+include_once "components.php"
 
 ?>
 
 <!DOCTYPE html>
 
-<html>
+<html lang="ru">
 
 <head>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <link rel="stylesheet" type="text/css" href="css/styles.css">
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Регистрация</title>
+    <title>Загрузить файл</title>
 </head>
 
 <body>
     <div class="container">
+        <?php renderTopMenu() ?>
+
         <div class="row">
-            <form class="center-align col s4 offset-s4" action="sign_up.php" method="POST">
-                <h2>Регистрация</h2>
+            <form class="col s8" action="sign_in.php" method="POST">
+                <h3>Загрузить файл</h3>
                 <?php
                 if ($error) {
                     echo $error;
                 }
                 ?>
 
-                <input placeholder="Имя пользователя" autofocus name="username">
-                <input placeholder="Пароль" type="password" name="password">
-                <input placeholder="Пароль еще раз" type="password" name="password_repeat">
+                <input placeholder="Псевдоним" autofocus name="name">
+                <br>
+                <br>
+                <input type="file" name="file">
+                <br>
+                <br>
 
                 <input type="submit">
             </form>

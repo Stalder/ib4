@@ -1,4 +1,4 @@
 <?php
 
-
-echo "Hello world))";
+header('Location: ../profile.php');
+exit();
