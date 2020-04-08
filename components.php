@@ -25,7 +25,7 @@ function renderFile($title, $link)
     if ($link) {
         $fileCard = <<<HTML
         <div class="col s2">
-            <a href="$link">
+            <a download="$title" href="$link">
                 <div class="card-panel teal">
                     <span class="white-text">
                         $title

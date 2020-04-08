@@ -4,14 +4,18 @@ include_once "utils.php";
 
 redirectSignInIfUnauthorized();
 
+$userId = $_COOKIE['id'];
+
 $link = connect_mysql();
 
-$user_id = $_COOKIE['id'];
-
-$query = mysqli_query($link, "SELECT user_login FROM users WHERE user_id='" . mysqli_real_escape_string($link, $user_id) . "' LIMIT 1");
+$query = mysqli_query($link, "SELECT user_login FROM users WHERE user_id='" . mysqli_real_escape_string($link, $userId) . "' LIMIT 1");
 $data = mysqli_fetch_assoc($query);
 
-$username = $data['user_login']
+$username = $data['user_login'];
+
+$files = mysqli_query($link, "SELECT * from files WHERE owner_id='" . $userId . "'");
+
+$filesCount = mysqli_num_rows($files);
 ?>
 
 <!DOCTYPE html>
@@ -31,12 +35,13 @@ $username = $data['user_login']
     <div class="container">
         <?php renderTopMenu() ?>
         <h3>Профиль</h3>
-        <span>Привет, <?php echo $username ?>! У тебя 4 файла:</span>
+        <span>Привет, <?php echo $username ?>! Количество файлов: <?php echo $filesCount ?></span>
         <div class="row">
-            <?php renderFile("Файл1", "vdsvd") ?>
-            <?php renderFile("Файл2", "vdsvd") ?>
-            <?php renderFile("Файл3", "vdsvd") ?>
-            <?php renderFile("Файл4", "vdsvd") ?>
+            <?php
+            while ($row = $files->fetch_assoc()) {
+                renderFile($row['file_name'], $row['owner_id'] == $userId ? $row['file_path'] : '');
+            }
+            ?>
         </div>
 
         <div class="row">

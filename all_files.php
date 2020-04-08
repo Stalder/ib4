@@ -3,6 +3,12 @@ include_once "components.php";
 include_once "utils.php";
 
 redirectSignInIfUnauthorized();
+
+$link = connect_mysql();
+
+$userId = $_COOKIE['id'];
+
+$files = mysqli_query($link, "SELECT * from files")
 ?>
 
 <!DOCTYPE html>
@@ -25,18 +31,11 @@ redirectSignInIfUnauthorized();
         <h3>Все файлы</h3>
 
         <div class="row">
-            <?php renderFile("Файл1", "vdsvd") ?>
-            <?php renderFile("Файл1", "") ?>
-            <?php renderFile("Файл1", "") ?>
-            <?php renderFile("Файл1", "dvsdvsdv") ?>
-            <?php renderFile("Файл1", "") ?>
-            <?php renderFile("Файл1", "") ?>
-            <?php renderFile("Файл1", "vsdvsd") ?>
-            <?php renderFile("Файл1", "") ?>
-            <?php renderFile("Файл1", "") ?>
-            <?php renderFile("Файл1", "") ?>
-            <?php renderFile("Файл1", "") ?>
-            <?php renderFile("Файл1", "") ?>
+            <?php
+            while ($row = $files->fetch_assoc()) {
+                renderFile($row['file_name'], $row['owner_id'] == $userId ? $row['file_path'] : '');
+            }
+            ?>
         </div>
     </div>
 

@@ -5,14 +5,22 @@ redirectSignInIfUnauthorized();
 
 $error = false;
 
+$userId = $_COOKIE['id'];
+
 if (isset($_FILES["file"])) {
+    $link = connect_mysql();
+
     $prettyFilename = $_FILES['file']["name"];
     $file = $_FILES['file'];
 
     $ext = pathinfo($prettyFilename, PATHINFO_EXTENSION);
     $filenameToSave = generateCode(42);
 
-    move_uploaded_file($file['tmp_name'], "uploads/" . $filenameToSave . "." . $ext);
+    $filePath = "uploads/" . $filenameToSave . "." . $ext;
+
+    move_uploaded_file($file['tmp_name'], $filePath);
+
+    mysqli_query($link, "INSERT INTO files SET file_name='" . $prettyFilename . "', file_path='" . $filePath . "', owner_id='" . $userId . "'");
 
     header('Location: profile.php');
     exit();
