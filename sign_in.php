@@ -1,18 +1,42 @@
 <?php
+include_once "utils.php";
 
 $error = false;
+
+$link = connect_mysql();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($_POST["username"] && $_POST["password"]) {
 
-        // Authentication  
+        $query = mysqli_query($link, "SELECT user_id, user_password FROM users WHERE user_login='" . mysqli_real_escape_string($link, $_POST['username']) . "' LIMIT 1");
+        $data = mysqli_fetch_assoc($query);
 
-        header('Location: ../index.php');
-        exit();
+        echo $query->count;
+
+        echo $_POST["username"];
+
+        echo $data['user_password'] . "<br>";
+        echo $_POST['password'];
+
+        if ($data['user_password'] === md5(md5($_POST['password']))) {
+            $hash = md5(generateCode(10));
+
+            mysqli_query($link, "UPDATE users SET user_hash='" . $hash . "' WHERE user_id='" . $data['user_id'] . "'");
+
+            setcookie("id", $data['user_id'], time() + 60 * 60 * 24 * 30, "/");
+            setcookie("hash", $hash, time() + 60 * 60 * 24 * 30, "/", null, null, true); // httponly !!!
+
+            header("Location: profile.php");
+            exit();
+        } else {
+            $error = "Вы ввели неправильное имя пользователя или пароль";
+        }
     } else {
         $error = "Введите имя пользователя и пароль";
     }
 }
+
+redirectProfileIfAuthorized();
 
 ?>
 
@@ -43,7 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <input placeholder="Имя пользователя" autofocus name="username">
                 <input placeholder="Пароль" type="password" name="password">
 
-                <input type="submit">
+                <input type="submit" name="submit">
             </form>
         </div>
     </div>

@@ -6,18 +6,7 @@
  */
 
 
-function createConnection()
+function connect_mysql()
 {
-    $user = 'ib4';
-    $password = 'ib4';
-    $db = 'ib4';
-    $host = 'localhost';
-    $port = 8889;
-
-    $mysqli = new mysqli($host, $user, $password, $db, $port);
-    if ($mysqli->connect_errno) {
-        die('Cannot connect to mySQL');
-    }
-
-    return $mysqli;
+    return mysqli_connect("localhost", "ib4", "ib4", "ib4", 8889);
 }

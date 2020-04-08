@@ -1,4 +1,7 @@
 <?php
+include_once "utils.php";
+
+redirectSignInIfUnauthorized();
 
 $error = false;
 

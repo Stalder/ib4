@@ -1,5 +1,8 @@
 <?php
-include_once "components.php"
+include_once "components.php";
+include_once "utils.php";
+
+redirectSignInIfUnauthorized();
 ?>
 
 <!DOCTYPE html>
