@@ -5,16 +5,17 @@ redirectSignInIfUnauthorized();
 
 $error = false;
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if ($_POST["username"] && $_POST["password"]) {
+if (isset($_FILES["file"])) {
+    $prettyFilename = $_FILES['file']["name"];
+    $file = $_FILES['file'];
 
-        // Authentication  
+    $ext = pathinfo($prettyFilename, PATHINFO_EXTENSION);
+    $filenameToSave = generateCode(42);
 
-        header('Location: ../index.php');
-        exit();
-    } else {
-        $error = "Введите имя пользователя и пароль";
-    }
+    move_uploaded_file($file['tmp_name'], "uploads/" . $filenameToSave . "." . $ext);
+
+    header('Location: profile.php');
+    exit();
 }
 
 include_once "components.php"
@@ -39,7 +40,7 @@ include_once "components.php"
         <?php renderTopMenu() ?>
 
         <div class="row">
-            <form class="col s8" action="sign_in.php" method="POST">
+            <form class="col s8" enctype="multipart/form-data" action="upload.php" method="POST">
                 <h3>Загрузить файл</h3>
                 <?php
                 if ($error) {
@@ -47,10 +48,7 @@ include_once "components.php"
                 }
                 ?>
 
-                <input placeholder="Псевдоним" autofocus name="name">
-                <br>
-                <br>
-                <input type="file" name="file">
+                <input type="file" name="file" required>
                 <br>
                 <br>
 

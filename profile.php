@@ -3,6 +3,15 @@ include_once "components.php";
 include_once "utils.php";
 
 redirectSignInIfUnauthorized();
+
+$link = connect_mysql();
+
+$user_id = $_COOKIE['id'];
+
+$query = mysqli_query($link, "SELECT user_login FROM users WHERE user_id='" . mysqli_real_escape_string($link, $user_id) . "' LIMIT 1");
+$data = mysqli_fetch_assoc($query);
+
+$username = $data['user_login']
 ?>
 
 <!DOCTYPE html>
@@ -22,7 +31,7 @@ redirectSignInIfUnauthorized();
     <div class="container">
         <?php renderTopMenu() ?>
         <h3>Профиль</h3>
-        <span>Привет, username! У тебя 4 файла:</span>
+        <span>Привет, <?php echo $username ?>! У тебя 4 файла:</span>
         <div class="row">
             <?php renderFile("Файл1", "vdsvd") ?>
             <?php renderFile("Файл2", "vdsvd") ?>
@@ -37,6 +46,7 @@ redirectSignInIfUnauthorized();
                 <input placeholder="Текущий пароль" name="old_password">
                 <input placeholder="Новый пароль" name="new_password">
                 <input placeholder="Новый пароль еще раз" name="new_password_again">
+                <input type="hidden" name="username" value="<?php echo $username ?>">
                 <br>
 
                 <input type="submit">

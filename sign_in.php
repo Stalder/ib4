@@ -11,13 +11,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $query = mysqli_query($link, "SELECT user_id, user_password FROM users WHERE user_login='" . mysqli_real_escape_string($link, $_POST['username']) . "' LIMIT 1");
         $data = mysqli_fetch_assoc($query);
 
-        echo $query->count;
-
-        echo $_POST["username"];
-
-        echo $data['user_password'] . "<br>";
-        echo $_POST['password'];
-
         if ($data['user_password'] === md5(md5($_POST['password']))) {
             $hash = md5(generateCode(10));
 
