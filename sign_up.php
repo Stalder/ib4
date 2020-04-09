@@ -4,10 +4,7 @@ include_once "utils.php";
 
 redirectProfileIfAuthorized();
 
-$link = connect_mysql();
-
 if (isset($_POST['submit'])) {
-
     $err = [];
 
     if (!preg_match("/^[a-zA-Z0-9]+$/", $_POST['username'])) {
@@ -22,16 +19,19 @@ if (isset($_POST['submit'])) {
         $err[] = "Пароли не совпадают";
     }
 
-    $query = mysqli_query($link, "SELECT user_id FROM users WHERE user_login='" . mysqli_real_escape_string($link, $_POST['username']) . "'");
+    $link = connect_mysql();
+
+    $escapedLogin = mysqli_real_escape_string($link, $_POST['username']);
+
+    $query = mysqli_query($link, "SELECT user_id FROM users WHERE user_login='" . $escapedLogin . "'");
     if (mysqli_num_rows($query) > 0) {
         $err[] = "Пользователь с таким логином уже существует в базе данных";
     }
 
     if (count($err) == 0) {
-        $login = $_POST['username'];
         $password = md5(md5(trim($_POST['password'])));
 
-        mysqli_query($link, "INSERT INTO users SET user_login='" . $login . "', user_password='" . $password . "'");
+        mysqli_query($link, "INSERT INTO users SET user_login='" . $escapedLogin . "', user_password='" . $password . "'");
         header("Location: sign_in.php");
         exit();
     }

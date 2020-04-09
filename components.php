@@ -22,13 +22,15 @@ function renderFile($title, $link)
 {
     $fileCard = "";
 
+    $preparedFilename = htmlspecialchars($title, ENT_QUOTES, 'UTF-8');
+
     if ($link) {
         $fileCard = <<<HTML
         <div class="col s2">
             <a download="$title" href="$link">
                 <div class="card-panel teal">
                     <span class="white-text">
-                        $title
+                    $preparedFilename
                     </span>
                     <br>
                     <br>
@@ -42,7 +44,7 @@ HTML;
         <div class="col s2">
                 <div class="card-panel grey">
                     <span class="white-text">
-                        $title
+                    $preparedFilename
                     </span>
                     <br>
                     <br>

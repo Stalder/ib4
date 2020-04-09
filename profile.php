@@ -8,7 +8,8 @@ $userId = $_COOKIE['id'];
 
 $link = connect_mysql();
 
-$query = mysqli_query($link, "SELECT user_login FROM users WHERE user_id='" . mysqli_real_escape_string($link, $userId) . "' LIMIT 1");
+// We can use iserId without escaping because redirectSignInIfUnauthorized checks $_COOKIE['id'] value
+$query = mysqli_query($link, "SELECT user_login FROM users WHERE user_id='" . $userId . "' LIMIT 1");
 $data = mysqli_fetch_assoc($query);
 
 $username = $data['user_login'];
@@ -35,7 +36,7 @@ $filesCount = mysqli_num_rows($files);
     <div class="container">
         <?php renderTopMenu() ?>
         <h3>Профиль</h3>
-        <span>Привет, <?php echo $username ?>! Количество файлов: <?php echo $filesCount ?></span>
+        <span>Привет, <?php echo htmlspecialchars($username, ENT_QUOTES, 'UTF-8') ?>! Количество файлов: <?php echo $filesCount ?></span>
         <div class="row">
             <?php
             while ($row = $files->fetch_assoc()) {

@@ -14,12 +14,13 @@ if (isset($_POST['old_password']) && isset($_POST['new_password']) && isset($_PO
 
     $link = connect_mysql();
 
-    $query = mysqli_query($link, "SELECT user_id, user_password FROM users WHERE user_login='" . mysqli_real_escape_string($link, $_POST['username']) . "' LIMIT 1");
+    $escapedUsername = mysqli_real_escape_string($link, $_POST['username']);
+
+    $query = mysqli_query($link, "SELECT user_id, user_password FROM users WHERE user_login='" . $escapedUsername . "' LIMIT 1");
     $data = mysqli_fetch_assoc($query);
 
 
     if ($data['user_password'] !== md5(md5($_POST['old_password']))) {
-        echo $data['user_password'] . "<br>" . $_POST['old_password'] . "<br>";
         echo "<span>Введен неверный пароль. Ну как так-то?</span>";
         exit();
     }

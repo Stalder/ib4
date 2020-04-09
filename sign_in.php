@@ -7,8 +7,8 @@ $link = connect_mysql();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($_POST["username"] && $_POST["password"]) {
-
-        $query = mysqli_query($link, "SELECT user_id, user_password FROM users WHERE user_login='" . mysqli_real_escape_string($link, $_POST['username']) . "' LIMIT 1");
+        $escapedUsername = mysqli_real_escape_string($link, $_POST['username']);
+        $query = mysqli_query($link, "SELECT user_id, user_password FROM users WHERE user_login='" . $escapedUsername . "' LIMIT 1");
         $data = mysqli_fetch_assoc($query);
 
         if ($data['user_password'] === md5(md5($_POST['password']))) {
